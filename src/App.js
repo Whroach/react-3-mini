@@ -28,10 +28,19 @@ class App extends Component {
     this.deleteBuyer = this.deleteBuyer.bind(this)
   }
 
+  //Mini project code below:
+
   getVehicles() {
     // axios (GET)
     // setState with response -> vehiclesToDisplay
+    axios.get('https://joes-autos.herokuapp.com/api/vehicles')
+    .then(res => {
+      toast.success('Succesfully added Vehicles') //toast. is just a stylized alert
+      this.setState({vehiclesToDisplay: res.data})//how we handle succesful requet....removed console.log(res) 
+    .catch(error => toast.error('Failed at fetching Vehicles'))
   }
+};
+  //Mini project code above.
 
   getPotentialBuyers() {
     // axios (GET)
@@ -41,6 +50,13 @@ class App extends Component {
   sellCar(id) {
     // axios (DELETE)
     // setState with response -> vehiclesToDisplay
+    axios.delete(`'https://joes-autos.herokuapp.com/api/vehicles/${id}`)
+    .then(res => {
+      toast.success('Sucessfully deleted vehicle');
+      this.setState({vehiclesToDisplay: res.data.vehicles});
+    })
+    .catch(err => toast.error('Failed to delete vehicle'))
+
   }
 
   filterByMake() {
@@ -60,9 +76,15 @@ class App extends Component {
   updatePrice(priceChange, id) {
     // axios (PUT)
     // setState with response -> vehiclesToDisplay
+    axios.put(`https://joes-autos.herokuapp.com/api/vehicles/${id}/${priceChange}`) //passing in 2 parameters
+    .then(res => {
+      toast.success('Sucessfully updated price');
+      this.setState({vehiclesToDisplay: res.data.vehicles});
+    })
+    .catch(err => toast.error('Failed to update price'))
   }
 
-  addCar() {
+  addCar() { //adding new objects...make sure its structured the same as the other objects.
     let newCar = {
       make: this.make.value,
       model: this.model.value,
@@ -73,6 +95,13 @@ class App extends Component {
 
     // axios (POST)
     // setState with response -> vehiclesToDisplay
+    axios.post('https://joes-autos.herokuapp.com/api/vehicles', newCar) //adding data to our database
+    .then(res =>{
+      toast.success('Sucessfully added vehicle')
+      this.setState({vehiclesToDisplay: res.data.vehicles})
+
+    })
+    .catch(err => toast.error('Failed to add vehicles'))
   }
 
   addBuyer() {
